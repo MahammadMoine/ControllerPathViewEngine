@@ -20,12 +20,12 @@ namespace ControllerPathViewEngine
 
         public override ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
         {
-            return InvokeWithControllerPath(controllerContext, () => base.FindView(controllerContext, viewName, masterName, useCache));
+            return FindUsingControllerPath(controllerContext, () => base.FindView(controllerContext, viewName, masterName, useCache));
         }
 
         public override ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
         {
-            return InvokeWithControllerPath(controllerContext, () => base.FindPartialView(controllerContext, partialViewName, useCache));
+            return FindUsingControllerPath(controllerContext, () => base.FindPartialView(controllerContext, partialViewName, useCache));
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace ControllerPathViewEngine
         /// key is generated from the "controller" value. Using the full controller path allows separate views to be cached, 
         /// supporting situations where we have the same controller name in different namespaces.
         /// </summary>
-        private T InvokeWithControllerPath<T>(ControllerContext controllerContext, Func<T> func)
+        private ViewEngineResult FindUsingControllerPath(ControllerContext controllerContext, Func<ViewEngineResult> func)
         {
             string controllerName = controllerContext.RouteData.GetRequiredString("controller");
             string controllerPath = controllerPathResolver.GetPath(controllerContext.Controller.GetType());
