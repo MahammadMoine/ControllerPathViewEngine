@@ -1,0 +1,18 @@
+Separate post about modularity
+
+Don't have separate root namespace for path resolver, just have root controller namespace.
+
+Demo both
+
+
+Simple Demo
+
+
+Modular Demo
+
+
+Users/UsersController.cs
+Customers/CustomersController.cs
+
+
+Acc

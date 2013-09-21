@@ -1,0 +1,60 @@
+﻿@using System.Web.Mvc.Html
+@using ControllerPathViewEngine.MoreComplexDemo.Controllers.Catalogue.Categories
+@using ControllerPathViewEngine.MoreComplexDemo.Controllers.Catalogue.Products
+@using ControllerPathViewEngine.MoreComplexDemo.Controllers.Catalogue.Products.Reviews
+@using ControllerPathViewEngine.MoreComplexDemo.Controllers.Home
+@using Microsoft.Web.Mvc
+@using Microsoft.Web.Mvc.Html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ControllerPathViewEngine - More Complex Demo</title>
+    <style type="text/css">
+        body
+        {
+            font-family: sans-serif;
+        }
+
+        div.panel
+        {
+            float: left;
+            margin: 0;
+            width: 30%;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>ControllerPathViewEngine - More Complex Demo</h1>
+        <p><strong>Having your view folders match your controller namespace is particularly useful with a deeply nested hierarchy of controllers.</strong></p>
+        <p>Note that each controller is located within its own namespace in this demo. We've enabled the <i>mergeNameIntoNamespace</i> option, which prevents an additional nested folder being used if the controller type name matches the containing namespace. So we end up with "~/Views/Catalogue/Products/Index.cshtml" instead of "~/Views/Catalogue/Products/Products/Index.cshtml"</p>
+        <p>Thanks to Simply Restful for the nested route URLs.</p>
+        <div class="panel">
+            <h2>Current Screen</h2>
+            <p>The content in the box is from the actual view:</p>
+            <div style="padding: 10px; background-color: #ccc">
+                @RenderBody()
+            </div>
+            <h2>Links to Controller Actions</h2>
+            <p>@Html.ActionLink((HomeController c) => c.Index(), "Home / Index")<br />
+            <p>@Html.ActionLink((CategoriesController c) => c.Index(), "Catalogue / Categories.Index")<br />
+            <p>@Html.ActionLink((ProductsController c) => c.Index(), "Catalogue / Products / Index")<br />
+            <p>@Html.ActionLink((ProductsController c) => c.Show("18"), "Catalogue / Products / Show")<br />
+            <p>@Html.ActionLink((ReviewsController c) => c.Index("18"), "Catalogue / Products / Reviews / Index")<br />
+            <p>@Html.ActionLink((ReviewsController c) => c.Show("18", "293"), "Catalogue / Products / Reviews / Show")<br />
+                
+            <h2>Missing View Exceptions</h2>
+            <p>This loads an action with a missing view. The standard "can't find the view" exception includes the correct path</p>
+            <p>@Html.ActionLink((ProductsController c) => c.New(), "Products / New")<br />
+
+        </div>
+        <div class="panel">
+            <h2>Controller / View Locations</h2>
+            <p>The controllers and views are structured as shown below, with views located in a folder hierarchy based on the controller namespace.</p>
+            <img src="@Url.Content("~/content/structure.png")" />
+
+        </div>
+    </div>
+</body>
+</html>
