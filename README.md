@@ -25,7 +25,7 @@ For a component as small as this, there are advantages to simply dropping the co
 Configuration Options
 ---------------------
 
-Note that you need to provide an instance of ControllerPathSettings to the ControllerPathRazorViewEngine constructor. This settings class has 2 options:
+The following settings can be configured via ControllerPathSettings:
 
 <dl>
   <dt>rootNamespace</dt>
@@ -39,25 +39,29 @@ Views Folder Structure and Controller Paths
 
 ControllerPathRazorViewEngine looks for views in a folder that is based on the namespace of the controller rendering the view.
 
-Pattern: Views/{controller path}/{view name}.{view file extension}
-Example: Views/Catalogue/Products/Index.cshtml
+This is the pattern used:
+
+Views/{controller path}/{view name}.{view file extension}
+
+Here the path to the Index.cshtml view for ControllerPathViewEngine.SimpleDemo.Controllers.Catalogue.ProductsController:
+
+Views/Catalogue/Products/Index.cshtml
 
 The "controller path" part is based on a combination of the controller namespace and controller name.
 
-Let's use ProductsController in namespace ControllerPathViewEngine.SimpleDemo.Controllers.Catalogue as an example and assume that we've used "ControllerPathViewEngine.SimpleDemo.Controllers" as our rootNamespace setting when initialising the view engine.
+Let's use the above ProductsController with "ControllerPathViewEngine.SimpleDemo.Controllers" as our rootNamespace setting.
 
-The controller path would be generated as follows:
+The controller path is built up as follows:
 
 * Trim the root namespace ("ControllerPathViewEngine.SimpleDemo.Controllers") from the beginning of the controller namespace ("ControllerPathViewEngine.SimpleDemo.Controllers.Catalogue"). This gives us "Catalogue"
-* Add an additional folder based on the controller name (without the "Controller" bit at the end). This gives us: "Catalogue/Products"
-
-In our example, the controller path would be "Catalogue/Products" and the full path to the "Index" razor view would be "Views/Catalogue/Products/Index.cshtml"
+* Add an additional folder based on the controller name (without the "Controller" bit at the end). 
+* This gives us a controller path of "Catalogue/Products and the full path to the "Index" razor view is "Views/Catalogue/Products/Index.cshtml"
 
 
 Merging Controller Names with Parent Namespace
 ----------------------------------------------
 
-Some developers like to locate each controller within its own namespace. If you're a good follower of the Single Responsibility Principle, you might have a few extra classes that help the controller do its work, things like one-off model classes, validators etc.
+Some developers like to locate each controller within its own namespace. If you're following the Single Responsibility Principle, you might have a few extra classes that accompany your controller and help it do its work, things like one-off model classes, validators etc.
 
 The MoreComplexDemo demonstration application demonstrates this structure, for example CategoriesController is located within the namespace ControllerPathViewEngine.MoreComplexDemo.Controllers.Catalogue.Categories.
 
