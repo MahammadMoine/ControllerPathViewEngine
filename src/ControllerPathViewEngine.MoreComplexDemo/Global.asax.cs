@@ -21,8 +21,7 @@ namespace ControllerPathViewEngine.MoreComplexDemo
 
         private void UseCustomViewEngine(ViewEngineCollection viewEngines)
         {
-            string rootControllerNamespace = typeof(MvcApplication).Namespace + ".Controllers";
-            var settings = new ControllerPathSettings(rootControllerNamespace, mergeNameIntoNamespace: true);
+            var settings = new ControllerPathSettings(mergeNameIntoNamespace: true);
             var viewEngine = new ControllerPathRazorViewEngine(settings);
 
             viewEngines.Clear();

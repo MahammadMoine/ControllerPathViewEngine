@@ -22,7 +22,7 @@ namespace ControllerPathViewEngine.SimpleDemo
 
         private static void UseCustomViewEngine(ViewEngineCollection viewEngines)
         {
-            var settings = new ControllerPathSettings(typeof(HomeController).Namespace, mergeNameIntoNamespace: false);
+            var settings = new ControllerPathSettings(mergeNameIntoNamespace: false);
             var viewEngine = new ControllerPathRazorViewEngine(settings);
 
             viewEngines.Clear();

@@ -1,14 +1,15 @@
-﻿using ControllerPathViewEngine.Tests.TestControllers;
-using ControllerPathViewEngine.Tests.TestControllers.Level1;
-using ControllerPathViewEngine.Tests.TestControllers.Level1.Level2;
+﻿using ControllerPathViewEngine.Tests.TestControllers.Area1.Controllers;
+using ControllerPathViewEngine.Tests.TestControllers.Area1.Controllers.AreaLevel1;
+using ControllerPathViewEngine.Tests.TestControllers.Area1.Controllers.AreaLevel1.AreaLevel2;
+using ControllerPathViewEngine.Tests.TestControllers.Controllers;
+using ControllerPathViewEngine.Tests.TestControllers.Controllers.Level1;
+using ControllerPathViewEngine.Tests.TestControllers.Controllers.Level1.Level2;
 using NUnit.Framework;
 
 namespace ControllerPathViewEngine.Tests
 {
     public abstract class shared_context
     {
-        protected const string RootNamespace = "ControllerPathViewEngine.Tests.TestControllers";
-
         protected abstract ControllerPathSettings Settings { get; }
 
         protected void ExpectPath<T>(string expectedPath)
@@ -32,7 +33,7 @@ namespace ControllerPathViewEngine.Tests
         {
             get
             {
-                return new ControllerPathSettings(RootNamespace, mergeNameIntoNamespace: false); 
+                return new ControllerPathSettings(mergeNameIntoNamespace: false); 
             }
         }
 
@@ -45,16 +46,29 @@ namespace ControllerPathViewEngine.Tests
         }
 
         [Test]
-        public void paths_at_all_levels_should_start_from_within_root_namespace()
+        public void paths_at_all_levels_should_start_from_within_controllers_namespace_within_root()
         {
             Assert.That(GetPath<Level1Controller>(), Is.StringStarting("Level1/"));
             Assert.That(GetPath<Level2Controller>(), Is.StringStarting("Level1/"));
         }
 
         [Test]
-        public void path_for_controller_directly_within_root_namespace_should_be_based_on_controller_name_only()
+        public void paths_at_all_levels_should_start_from_within_controllers_namespace_within_area()
+        {
+            Assert.That(GetPath<AreaLevel1Controller>(), Is.StringStarting("AreaLevel1/"));
+            Assert.That(GetPath<AreaLevel2Controller>(), Is.StringStarting("AreaLevel1/"));
+        }
+
+        [Test]
+        public void path_for_controller_directly_within_root_controllers_namespace_should_be_based_on_controller_name_only()
         {
             ExpectPath<Level0Controller>("Level0");
+        }
+
+        [Test]
+        public void path_for_controller_directly_within_area_controllers_namespace_should_be_based_on_controller_name_only()
+        {
+            ExpectPath<AreaLevel0Controller>("AreaLevel0");
         }
 
         [Test]
@@ -78,7 +92,7 @@ namespace ControllerPathViewEngine.Tests
         {
             get
             {
-                return new ControllerPathSettings(RootNamespace, mergeNameIntoNamespace: true);
+                return new ControllerPathSettings(mergeNameIntoNamespace: true);
             }
         }
             
