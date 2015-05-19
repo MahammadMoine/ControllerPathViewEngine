@@ -43,9 +43,16 @@ namespace ControllerPathViewEngine
         {
             string controllerName = controllerContext.RouteData.GetRequiredString("controller");
             string controllerPath = controllerPathResolver.GetPath(controllerContext.Controller.GetType());
-            controllerContext.RouteData.Values["controller"] = controllerPath;
-            var result = func();
-            controllerContext.RouteData.Values["controller"] = controllerName;
+            ViewEngineResult result;
+            try
+            {
+                controllerContext.RouteData.Values["controller"] = controllerPath;
+                result = func();
+            }
+            finally
+            {
+                controllerContext.RouteData.Values["controller"] = controllerName;
+            }
             return result;
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ControllerPathViewEngine
 {
@@ -21,51 +22,44 @@ namespace ControllerPathViewEngine
 
         private string GetControllerPath(Type controllerType)
         {
-            string directoryPath = GetDirectoryPath(controllerType);
             string controllerName = GetControllerName(controllerType);
+            var directories = GetDirectoriesBaseOnNamespace(controllerType).ToList();
 
-            bool excludeName = settings.MergeNameIntoNamespace && CanMerge(directoryPath, controllerName);
-
-            if (excludeName)
-                return directoryPath;
-            else if (directoryPath == "")
-                return controllerName;
-            else
-                return string.Format("{0}/{1}", directoryPath, controllerName);
-        }
-
-        private static bool CanMerge(string directoryPath, string controllerName)
-        {
-            return (directoryPath == controllerName || directoryPath.EndsWith(string.Format("/{0}", controllerName)));
-        }
-
-        private string GetDirectoryPath(Type controllerType)
-        {
-            // Whether in default Controllers folder or an area, the controller path
-            // will be based on namespace elements within the parent "Controllers"
-            // namespace element
-
-            string subNamespace = controllerType.Namespace ?? "";
-            const string parentNamespacePart = "Controllers";
-            int index = subNamespace.LastIndexOf(parentNamespacePart, StringComparison.OrdinalIgnoreCase);
-            if (index != -1)
+            bool excludeControllerName = settings.MergeNameIntoNamespace
+                && controllerName.Equals(directories.LastOrDefault(), StringComparison.OrdinalIgnoreCase);
+            if (!excludeControllerName)
             {
-                subNamespace = subNamespace.Substring(index + parentNamespacePart.Length)
-                    .TrimStart('.');
+                directories.Add(controllerName);
             }
-            
-            string directoryPath = subNamespace.Replace(".", "/");
-            return directoryPath;
+
+            return string.Join("/", directories);
+        }
+
+        private IEnumerable<string> GetDirectoriesBaseOnNamespace(Type controllerType)
+        {
+            var directories = controllerType.Namespace != null
+                ? controllerType.Namespace.Split('.')
+                : null;
+
+            if (directories == null || directories.Length == 0)
+                return Enumerable.Empty<string>();
+           
+            // Get a directory for each level within namespace below last occurence of 
+            // a "Controllers" element.
+            return directories
+                .Reverse()
+                .TakeWhile(x => x != "Controllers")
+                .Reverse();
         }
 
         private string GetControllerName(Type controllerType)
         {
-            string typeName = controllerType.Name;
-            if (typeName.EndsWith("Controller", StringComparison.OrdinalIgnoreCase))
+            string name = controllerType.Name;
+            if (name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase))
             {
-                return typeName.Substring(0, typeName.Length - "Controller".Length);
+                return name.Substring(0, name.Length - "Controller".Length);
             }
-            return typeName;
+            return name;
         }
     }
 }
