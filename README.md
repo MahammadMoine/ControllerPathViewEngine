@@ -75,3 +75,15 @@ The MoreComplexDemo demonstration application demonstrates this structure, for e
 Using the standard controller path pattern outlined above, we'd end up with an extra level in our view folder hierarchy, like "Catalogue/Categories/Categories/Index.cshtml".
 
 If you would prefer the controller name to be omitted from the controller path if its name matches the parent namespace, then use the mergeNameIntoNamespace setting when initialising the view engine.
+
+## Author
+
+Dan Malcolm - [@lakescoder](http://twitter.com/lakescoder) - http://www.danmalcolm.com
+
+## License
+
+See [UNLICENSE](UNLICENSE.txt)
+
+Please include a reference to this repo if including the source code in your own project, e.g. by including a comment like:
+
+// Adapted from https://github.com/danmalcolm/ControllerPathViewEngine
